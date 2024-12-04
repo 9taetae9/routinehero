@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RoutineHero</string>
+    <string name="new_routine_text">새 루틴 입력</string>
+</resources>
