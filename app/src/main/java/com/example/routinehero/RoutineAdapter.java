@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import java.util.List;
 public class RoutineAdapter extends ArrayAdapter<Routine> {
     private final boolean showCheckBox; // 체크박스 - ChecklistActivity에서 사용
     private final boolean showDeleteButton; // 삭제 버튼 - ManageRoutinesActivity에서 사용
+
 
     public RoutineAdapter(Context context, List<Routine> routines, boolean showCheckBox, boolean showDeleteButton) {
         super(context, R.layout.item_routine, routines);
@@ -34,6 +36,8 @@ public class RoutineAdapter extends ArrayAdapter<Routine> {
         TextView textView = convertView.findViewById(R.id.routine_name);
         CheckBox checkBox = convertView.findViewById(R.id.routine_checkbox);
         ImageButton deleteButton = convertView.findViewById(R.id.routine_delete_button);
+        ImageButton editButton = convertView.findViewById(R.id.routine_edit_button);
+
 
         assert routine != null;
         textView.setText(routine.getName());
@@ -67,6 +71,37 @@ public class RoutineAdapter extends ArrayAdapter<Routine> {
                             })
                             .create()
                             .show();
+                });
+            }
+        }
+
+        // 수정 버튼의 가시성 설정
+        if (editButton != null) {
+            editButton.setVisibility(showDeleteButton ? View.VISIBLE : View.GONE);
+
+            if (showDeleteButton) {
+                editButton.setOnClickListener(v -> {
+                    // 수정 기능 다이얼로그 생성
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("루틴 수정");
+
+                    final EditText input = new EditText(getContext());
+                    input.setText(routine.getName());
+                    input.setSelection(input.getText().length());
+                    builder.setView(input);
+
+                    builder.setPositiveButton("저장", (dialog, which) -> {
+                        String newName = input.getText().toString();
+                        if (!newName.isEmpty()) {
+                            routine.setName(newName);
+                            notifyDataSetChanged();
+                            Toast.makeText(getContext(), "루틴이 수정되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    builder.setNegativeButton("취소", (dialog, which) -> dialog.dismiss());
+
+                    builder.show();
                 });
             }
         }

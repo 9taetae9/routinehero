@@ -20,14 +20,24 @@
         android:paddingStart="8dp" />
 
     <ImageButton
+        android:id="@+id/routine_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:src="@android:drawable/ic_menu_edit"
+        android:contentDescription="수정"
+        android:padding="12dp" />
+
+
+    <ImageButton
         android:id="@+id/routine_delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
         android:src="@android:drawable/ic_menu_delete"
         android:contentDescription="삭제"
         android:padding="12dp" />
+    
 </LinearLayout>
