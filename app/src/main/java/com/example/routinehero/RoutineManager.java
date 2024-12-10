@@ -58,14 +58,14 @@ public class RoutineManager {
             consecutiveDays++;
             if (consecutiveDays >= DAYS_NEEDED[currentLevel - 1]) {
                 levelUp();
-                Toast.makeText(context, "레벨이 올라갔습니다!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "레벨 업!", Toast.LENGTH_SHORT).show();
             }
         } else {
             if (currentLevel > 1) {
                 currentLevel--;
-                Toast.makeText(context, "레벨이 감소했습니다. 오늘의 목표를 달성하지 못했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "오늘의 목표를 달성하지 못했습니다. 레벨 다운...", Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(context, "오늘의 목표를 달성하지 못했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "오늘의 목표를 달성하지 못했습니다. 꾸준히 루틴을 달성해주세요!", Toast.LENGTH_SHORT).show();
             }
             consecutiveDays = 0;
         }
