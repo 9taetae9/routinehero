@@ -101,10 +101,6 @@ public class RoutineManager {
         return currentLevel;
     }
 
-    public static int getConsecutiveDays() {
-        return consecutiveDays;
-    }
-
     public static int getCurrentTestDay() {
         return currentTestDay;
     }
