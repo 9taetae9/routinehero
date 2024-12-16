@@ -5,7 +5,9 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
@@ -16,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView characterImage;
     private ImageView previousCharacterImage;
     private ImageView nextCharacterImage;
+    private ProgressBar levelProgressBar;
+    private ImageView progressIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         characterImage = findViewById(R.id.character_image);
         previousCharacterImage = findViewById(R.id.previous_character_image);
         nextCharacterImage = findViewById(R.id.next_character_image);
+        levelProgressBar = findViewById(R.id.level_progress_bar);
+        progressIndicator = findViewById(R.id.progress_indicator);
 
         findViewById(R.id.decrease_day_button).setOnClickListener(v -> {
             RoutineManager.decrementTestDay();
@@ -104,6 +110,41 @@ public class MainActivity extends AppCompatActivity {
         String routineStatus = String.format("오늘 달성한 루틴: %d개 / 필요한 루틴: %d개 이상",
                 completedToday, requiredRoutines);
         requiredRoutinesText.setText(routineStatus);
+
+        // 루틴 달성 일수
+        int completedDays = 0;
+
+        // 루틴 달성 총 일수 계산
+        for (int i = 0; i < currentLevel - 1; i++) {
+            completedDays += RoutineManager.DAYS_NEEDED[i];
+        }
+
+        // 현재 레벨까지의 루틴 달성 일수를 completedDays에 추가
+        int daysInCurrentLevel = RoutineManager.DAYS_NEEDED[Math.min(currentLevel - 1, 9)]; // 배열 범위 초과 방지
+        int daysCompletedInCurrentLevel = daysInCurrentLevel - RoutineManager.getDaysNeededForNextLevel();
+        completedDays += daysCompletedInCurrentLevel;
+
+        // 루틴 달성 최대 일수를 totalPossibleDays로 설정
+        int totalPossibleDays = 0;
+        for (int days : RoutineManager.DAYS_NEEDED) {
+            totalPossibleDays += days;
+        }
+        levelProgressBar.setMax(totalPossibleDays);
+
+        // 최대 진행도를 totalPossibleDays로 제한
+        completedDays = Math.min(completedDays, totalPossibleDays);
+        levelProgressBar.setProgress(completedDays);
+
+        // 진행도 표시 위치 업데이트
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) progressIndicator.getLayoutParams();
+        float progressWidth = levelProgressBar.getWidth() - progressIndicator.getWidth();
+        float position = Math.min((progressWidth * completedDays) / totalPossibleDays, progressWidth);
+        params.leftMargin = (int) position;
+        progressIndicator.setLayoutParams(params);
+
+        // 진행도 표시 이미지 업데이트
+        progressIndicator.setImageResource(getCharacterResourceForLevel(currentLevel));
+        progressIndicator.setScaleType(ImageView.ScaleType.FIT_CENTER);
     }
 
     private static final int[] CHARACTER_RESOURCES = {

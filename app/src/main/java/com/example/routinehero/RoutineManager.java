@@ -10,11 +10,13 @@ public class RoutineManager {
     private static ArrayList<Routine> routines = new ArrayList<>();
     private static int currentLevel = 1;
     private static int consecutiveDays = 0;
-    private static final int[] REQUIRED_ROUTINES = {1, 2, 3, 4, 5, 5, 5, 5, 5, 5};
-    private static final int[] DAYS_NEEDED = {7, 7, 7, 7, 7, 14, 20, 30, 40, 50};
+    private static final int[] REQUIRED_ROUTINES = {1, 1, 1, 2, 2, 2, 3, 3, 4, 5};//*/{1, 2, 3, 4, 5, 5, 5, 5, 5, 5};
+    public static final int[] DAYS_NEEDED ={1, 1, 1, 2, 2, 2, 3, 3, 4, 5};//{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};//*/ {7, 7, 7, 7, 7, 14, 20, 30, 40, 50};
     private static int currentId = 0;
     private static int currentTestDay = 0;
     private static boolean todayRoutinesCompleted = false;
+    private static final int MAX_LEVEL = 10;
+    private static boolean isMaxLevelAchieved = false;
 
     public static void addRoutine(String name) {
         Routine routine = new Routine(++currentId, name);
@@ -57,14 +59,27 @@ public class RoutineManager {
         if (todayRoutinesCompleted) {
             consecutiveDays++;
             if (consecutiveDays >= DAYS_NEEDED[currentLevel - 1]) {
-                levelUp();
-                Toast.makeText(context, "레벨 업!", Toast.LENGTH_SHORT).show();
+                if (currentLevel < MAX_LEVEL) {
+                    levelUp();
+                    Toast.makeText(context, "레벨 업!", Toast.LENGTH_SHORT).show();
+                } else if (currentLevel == MAX_LEVEL && !isMaxLevelAchieved) {
+                    // 처음 최대 레벨 달성 시
+                    isMaxLevelAchieved = true;
+                    Toast.makeText(context, "축하합니다! 최고 레벨을 달성했습니다! 🎉", Toast.LENGTH_LONG).show();
+                } else {
+                    // 최대 레벨이고 루틴을 잘 수행한 경우
+                    Toast.makeText(context, "완벽한 하루였습니다! ⭐", Toast.LENGTH_SHORT).show();
+                }
+                // 최대 레벨에서는 연속 일수를 DAYS_NEEDED의 마지막 값으로 고정
+                if (currentLevel == MAX_LEVEL) {
+                    consecutiveDays = DAYS_NEEDED[MAX_LEVEL - 1];
+                }
             }
         } else {
             if (currentLevel > 1) {
                 currentLevel--;
                 Toast.makeText(context, "오늘의 목표를 달성하지 못했습니다. 레벨 다운...", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(context, "오늘의 목표를 달성하지 못했습니다. 꾸준히 루틴을 달성해주세요!", Toast.LENGTH_SHORT).show();
             }
             consecutiveDays = 0;
@@ -91,7 +106,7 @@ public class RoutineManager {
     }
 
     private static void levelUp() {
-        if (currentLevel < 10) {
+        if (currentLevel < MAX_LEVEL) {
             currentLevel++;
             consecutiveDays = 0;
         }
@@ -106,8 +121,10 @@ public class RoutineManager {
     }
 
     public static int getDaysNeededForNextLevel() {
-        if (currentLevel >= 1 && currentLevel <= 10) {
+        if (currentLevel >= 1 && currentLevel <= MAX_LEVEL) {
             return DAYS_NEEDED[currentLevel - 1] - consecutiveDays;
+        }else if(isMaxLevelAchieved){
+            return 0;
         }
         return 0;
     }
