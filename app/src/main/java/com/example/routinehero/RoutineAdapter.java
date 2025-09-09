@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import com.google.android.material.button.MaterialButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +35,8 @@ public class RoutineAdapter extends ArrayAdapter<Routine> {
         Routine routine = getItem(position);
         TextView textView = convertView.findViewById(R.id.routine_name);
         CheckBox checkBox = convertView.findViewById(R.id.routine_checkbox);
-        ImageButton deleteButton = convertView.findViewById(R.id.routine_delete_button);
-        ImageButton editButton = convertView.findViewById(R.id.routine_edit_button);
+        MaterialButton deleteButton = convertView.findViewById(R.id.routine_delete_button);
+        MaterialButton editButton = convertView.findViewById(R.id.routine_edit_button);
 
 
         assert routine != null;
