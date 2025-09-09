@@ -5,6 +5,10 @@ public class Routine {
     private String name;
     private boolean completed;
 
+    // JSON 직렬화를 위한 기본 생성자
+    public Routine() {
+    }
+
     public Routine(int id, String name) {
         this.id = id;
         this.name = name;
