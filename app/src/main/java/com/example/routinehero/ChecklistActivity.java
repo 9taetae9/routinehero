@@ -32,6 +32,13 @@ public class ChecklistActivity extends AppCompatActivity {
         findViewById(R.id.save_button).setOnClickListener(v -> {
             List<Routine> completedRoutines = adapter.getCompletedRoutines();
             RoutineManager.saveCompletedRoutines(completedRoutines);
+            
+            // 완료된 루틴이 있으면 애니메이션 트리거
+            if (!completedRoutines.isEmpty()) {
+                // MainActivity에 결과 전달
+                setResult(RESULT_OK);
+            }
+            
             Toast.makeText(this, "저장되었습니다", Toast.LENGTH_SHORT).show();
             finish();
         });
