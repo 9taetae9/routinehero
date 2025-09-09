@@ -16,9 +16,6 @@
             android:name=".ManageRoutinesActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageHabitsActivity"
-            android:exported="false" />
-        <activity
             android:name=".ChecklistActivity"
             android:exported="false" />
         <activity
